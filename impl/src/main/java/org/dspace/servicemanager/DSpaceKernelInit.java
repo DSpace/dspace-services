@@ -1,17 +1,13 @@
 /**
- * $Id: DSpaceKernelInit.java 3887 2009-06-18 03:45:35Z mdiggory $
- * $URL: https://scm.dspace.org/svn/repo/dspace2/core/trunk/impl/src/main/java/org/dspace/servicemanager/DSpaceKernelInit.java $
- * DSpaceKernelImpl.java - DSpace2 - Oct 6, 2008 2:55:53 AM - azeckoski
- **************************************************************************
- * Copyright (c) 2002-2009, The Duraspace Foundation.  All rights reserved.
- * Licensed under the Duraspace Foundation License.
- * 
- * A copy of the Duraspace License has been included in this
- * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
+ * $Id$
+ * $URL$
+ * *************************************************************************
+ * Copyright (c) 2002-2009, DuraSpace.  All rights reserved
+ * Licensed under the DuraSpace License.
  *
- * 
+ * A copy of the DuraSpace License has been included in this
+ * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
  */
-
 package org.dspace.servicemanager;
 
 import java.lang.management.ManagementFactory;
@@ -28,6 +24,8 @@ import javax.management.ReflectionException;
 
 import org.dspace.kernel.DSpaceKernel;
 import org.dspace.kernel.DSpaceKernelManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class simplifies the handling of MBean lookup, registration, etc. of the DSpace Kernel MBean.
@@ -37,6 +35,8 @@ import org.dspace.kernel.DSpaceKernelManager;
  */
 public class DSpaceKernelInit {
 
+    private static Logger log = LoggerFactory.getLogger(DSpaceKernelInit.class);
+    
     private static Object staticLock = new Object();
 
     /**
@@ -55,7 +55,7 @@ public class DSpaceKernelInit {
             }
             if (kernel == null) {
                 DSpaceKernelImpl kernelImpl = new DSpaceKernelImpl(mBeanName);
-                System.out.println("INFO Created new kernel: " + kernelImpl);
+                log.info("Created new kernel: " + kernelImpl);
                 // register the bean
                 String beanName = kernelImpl.getMBeanName();
                 register(beanName, kernelImpl);
@@ -80,7 +80,7 @@ public class DSpaceKernelInit {
                 if (! mbs.isRegistered(name)) {
                     // register the MBean
                     mbs.registerMBean(kernel, name);
-                    System.out.println("INFO Registered new Kernel MBEAN: " + mBeanName + " ["+kernel+"]");
+                    log.info("Registered new Kernel MBEAN: " + mBeanName + " ["+kernel+"]");
                 }
             } catch (MalformedObjectNameException e) {
                 throw new IllegalStateException(e);
@@ -110,7 +110,7 @@ public class DSpaceKernelInit {
                 mbs.unregisterMBean(name);
                 return true;
             } catch (Exception e) {
-                System.out.println("WARN Failed to unregister the MBean: " + mBeanName);
+                log.error("WARN Failed to unregister the MBean: " + mBeanName);
                 return false;
             }
         }

@@ -1,17 +1,13 @@
 /**
- * $Id: DSpaceKernelImpl.java 3887 2009-06-18 03:45:35Z mdiggory $
- * $URL: https://scm.dspace.org/svn/repo/dspace2/core/trunk/impl/src/main/java/org/dspace/servicemanager/DSpaceKernelImpl.java $
- * DSpaceKernelImpl.java - DSpace2 - Oct 6, 2008 2:55:53 AM - azeckoski
- **************************************************************************
- * Copyright (c) 2002-2009, The Duraspace Foundation.  All rights reserved.
- * Licensed under the Duraspace Foundation License.
- * 
- * A copy of the Duraspace License has been included in this
- * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
+ * $Id$
+ * $URL$
+ * *************************************************************************
+ * Copyright (c) 2002-2009, DuraSpace.  All rights reserved
+ * Licensed under the DuraSpace License.
  *
- * 
+ * A copy of the DuraSpace License has been included in this
+ * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
  */
-
 package org.dspace.servicemanager;
 
 import java.lang.management.ManagementFactory;
@@ -40,6 +36,8 @@ import org.dspace.kernel.ServiceManager;
 import org.dspace.servicemanager.config.DSpaceConfigurationService;
 import org.dspace.services.ConfigurationService;
 import org.dspace.utils.DSpace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the kernel implementation which starts up the core of DSpace and
@@ -55,6 +53,7 @@ import org.dspace.utils.DSpace;
  */
 public class DSpaceKernelImpl implements DSpaceKernel, DynamicMBean, CommonLifecycle<DSpaceKernel> {
 
+    private static Logger log = LoggerFactory.getLogger(DSpaceKernelImpl.class);
     /**
      * Creates a DSpace Kernel, does not do any checks though,
      * do not call this, use {@link DSpaceKernelInit#getKernel(String)}
@@ -155,7 +154,7 @@ public class DSpaceKernelImpl implements DSpaceKernel, DynamicMBean, CommonLifec
             running = true;
             // add in the shutdown hook
             registerShutdownHook();
-            System.out.println("INFO DSpace kernel startup completed in "+loadTime+" ms and registered as MBean: " + mBeanName);
+            log.info("DSpace kernel startup completed in "+loadTime+" ms and registered as MBean: " + mBeanName);
         }
     }
 
@@ -179,7 +178,7 @@ public class DSpaceKernelImpl implements DSpaceKernel, DynamicMBean, CommonLifec
             serviceManagerSystem = null;
             configurationService = null;
             // log completion (logger may be gone at this point so we cannot really use it)
-            System.out.println("INFO: DSpace kernel shutdown completed and unregistered MBean: " + mBeanName);
+            log.info("DSpace kernel shutdown completed and unregistered MBean: " + mBeanName);
         }
     }
 
@@ -206,7 +205,7 @@ public class DSpaceKernelImpl implements DSpaceKernel, DynamicMBean, CommonLifec
                 }
             } catch (Exception e) {
                 // cannot use the logger here as it is already gone at this point
-                System.out.println("INFO: Failed to unregister the MBean: " + mBeanName);
+                log.error("INFO: Failed to unregister the MBean: " + mBeanName, e);
             }
             // trash the shutdown hook as we do not need it anymore
             if (this.shutdownHook != null) {
@@ -236,7 +235,7 @@ public class DSpaceKernelImpl implements DSpaceKernel, DynamicMBean, CommonLifec
         try {
             doDestroy();
         } catch (Exception e) {
-            System.out.println("WARN Failure attempting to cleanup the DSpace kernel: " + e.getMessage());
+            log.error("WARN Failure attempting to cleanup the DSpace kernel: " + e.getMessage(), e);
         }
     }
 

@@ -1,23 +1,13 @@
 /**
- * $Id: ServiceMixinManager.java 3887 2009-06-18 03:45:35Z mdiggory $
- * $URL: https://scm.dspace.org/svn/repo/dspace2/core/trunk/impl/src/main/java/org/dspace/servicemanager/ServiceMixinManager.java $
- * EBlogic.java - entity-broker - Apr 15, 2008 4:29:18 PM - azeckoski
- **************************************************************************
- * Copyright (c) 2007, 2008 Sakai Foundation
+ * $Id$
+ * $URL$
+ * *************************************************************************
+ * Copyright (c) 2002-2009, DuraSpace.  All rights reserved
+ * Licensed under the DuraSpace License.
  *
- * Licensed under the Educational Community License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.osedu.org/licenses/ECL-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * A copy of the DuraSpace License has been included in this
+ * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
  */
-
 package org.dspace.servicemanager;
 
 import java.io.Serializable;
@@ -35,6 +25,8 @@ import java.util.Map.Entry;
 import org.azeckoski.reflectutils.ReflectUtils;
 import org.azeckoski.reflectutils.refmap.ReferenceMap;
 import org.azeckoski.reflectutils.refmap.ReferenceType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Borrowed from EntityBus since this already will handle the mixins for something correctly and easily,
@@ -43,6 +35,8 @@ import org.azeckoski.reflectutils.refmap.ReferenceType;
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
 public class ServiceMixinManager {
+
+    private static Logger log = LoggerFactory.getLogger(ServiceMixinManager.class);
 
     /**
      * This is a map from the serviceName only to the service and also 
@@ -239,7 +233,7 @@ public class ServiceMixinManager {
 //                ((RequestAware)service).setRequestGetter(requestGetter);
 //            }
         }
-        System.out.println("INFO Registered service ("+service.getClass().getName()
+        log.info("Registered service ("+service.getClass().getName()
                 +") serviceName ("+serviceName+") with "+count+" mixins");
         return classList;
     }
@@ -293,7 +287,7 @@ public class ServiceMixinManager {
         serviceNameMap.remove(key);
         // do any cleanup that needs to be done when unregistering
         // Nothing here right now
-        System.out.println("INFO Unregistered service mixin ("+mixin.getName()+") for serviceName ("+serviceName+")");
+        log.info("Unregistered service mixin ("+mixin.getName()+") for serviceName ("+serviceName+")");
     }
 
     /**

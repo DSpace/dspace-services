@@ -1,17 +1,13 @@
 /**
- * $Id: DSpaceConfigurationService.java 3887 2009-06-18 03:45:35Z mdiggory $
- * $URL: https://scm.dspace.org/svn/repo/dspace2/core/trunk/impl/src/main/java/org/dspace/servicemanager/config/DSpaceConfigurationService.java $
- * DSpaceConfigurationService.java - DSpace2 - Oct 6, 2008 3:31:04 AM - azeckoski
- **************************************************************************
- * Copyright (c) 2002-2009, The Duraspace Foundation.  All rights reserved.
- * Licensed under the Duraspace Foundation License.
- * 
- * A copy of the Duraspace License has been included in this
- * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
+ * $Id$
+ * $URL$
+ * *************************************************************************
+ * Copyright (c) 2002-2009, DuraSpace.  All rights reserved
+ * Licensed under the DuraSpace License.
  *
- * 
+ * A copy of the DuraSpace License has been included in this
+ * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
  */
-
 package org.dspace.servicemanager.config;
 
 import java.io.File;
@@ -358,11 +354,11 @@ public class DSpaceConfigurationService implements ConfigurationService {
                     if (key.startsWith(DSPACE_PREFIX)) {
                         String propName = key.substring(DSPACE_PREFIX.length());
                         String propVal = systemProps.getProperty(key);
-                        System.out.println("INFO Loading system property as config: "+propName+"=>"+propVal);
+                        log.info("Loading system property as config: "+propName+"=>"+propVal);
                         configMap.put(propName, propVal);
                     }
                 } catch (RuntimeException e) {
-                    System.err.println("Failed to properly get config value from system property: " + o);
+                    log.error("Failed to properly get config value from system property: " + o, e);
                 }
             }
         }

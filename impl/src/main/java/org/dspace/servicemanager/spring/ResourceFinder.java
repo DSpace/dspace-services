@@ -1,17 +1,13 @@
 /**
- * $Id: ResourceFinder.java 3887 2009-06-18 03:45:35Z mdiggory $
- * $URL: https://scm.dspace.org/svn/repo/dspace2/core/trunk/impl/src/main/java/org/dspace/servicemanager/spring/ResourceFinder.java $
- * ResourceFinder.java - caching - May 29, 2008 11:59:02 AM - azeckoski
- **************************************************************************
- * Copyright (c) 2002-2009, The Duraspace Foundation.  All rights reserved.
- * Licensed under the Duraspace Foundation License.
- * 
- * A copy of the Duraspace License has been included in this
- * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
+ * $Id$
+ * $URL$
+ * *************************************************************************
+ * Copyright (c) 2002-2009, DuraSpace.  All rights reserved
+ * Licensed under the DuraSpace License.
  *
- * 
+ * A copy of the DuraSpace License has been included in this
+ * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
  */
-
 package org.dspace.servicemanager.spring;
 
 import java.io.File;
@@ -25,6 +21,8 @@ import org.dspace.servicemanager.config.DSpaceConfigurationService;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Takes a list of paths to resources and turns them into different things (file/IS/resource),
@@ -34,6 +32,8 @@ import org.springframework.core.io.Resource;
  * @author Aaron Zeckoski (aaron@caret.cam.ac.uk)
  */
 public class ResourceFinder {
+
+    private static Logger log = LoggerFactory.getLogger(ResourceFinder.class);
 
     public static final String relativePath = DSpaceConfigurationService.DSPACE + "/";
     public static final String environmentPathVariable = DSpaceConfigurationService.DSPACE_HOME;
@@ -47,7 +47,7 @@ public class ResourceFinder {
                     rs.add(r);
                 } catch (IllegalArgumentException e) {
                     // do not add if not found, just skip
-                    System.out.println("WARN: " + e.getMessage() + ", continuing...");
+                    log.error(e.getMessage() + ", continuing...");
                 }
             }
         }

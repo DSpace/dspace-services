@@ -1,23 +1,13 @@
 /**
- * $Id: SampleServlet.java 3523 2009-03-05 14:58:10Z azeckoski $
- * $URL: https://scm.dspace.org/svn/repo/dspace2/core/trunk/impl/src/test/java/org/dspace/servicemanager/servlet/SampleServlet.java $
- * Example.java - entity-broker - 31 May 2007 7:01:11 PM - azeckoski
- **************************************************************************
- * Copyright (c) 2007, 2008 Sakai Foundation
+ * $Id$
+ * $URL$
+ * *************************************************************************
+ * Copyright (c) 2002-2009, DuraSpace.  All rights reserved
+ * Licensed under the DuraSpace License.
  *
- * Licensed under the Educational Community License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.osedu.org/licenses/ECL-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * A copy of the DuraSpace License has been included in this
+ * distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
  */
-
 package org.dspace.servicemanager.servlet;
 
 import java.io.IOException;
@@ -33,6 +23,8 @@ import org.dspace.kernel.DSpaceKernelManager;
 import org.dspace.kernel.ServiceManager;
 import org.dspace.services.RequestService;
 import org.dspace.services.SessionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test servlet for trying out the jetty server
@@ -42,6 +34,8 @@ import org.dspace.services.SessionService;
 public class SampleServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+
+    private static Logger log = LoggerFactory.getLogger(SampleServlet.class);
 
     private transient SessionService sessionService;
     private transient RequestService requestService;
@@ -66,7 +60,7 @@ public class SampleServlet extends HttpServlet {
             if (requestService == null) {
                 throw new IllegalStateException("Could not get the DSpace RequestService");
             }
-            System.out.println("Servlet initialized");
+            log.info("Servlet initialized");
         } catch (Exception e) {
             throw new IllegalStateException("FAILURE during init of direct servlet: " + e.getMessage(), e);
         }
@@ -90,7 +84,7 @@ public class SampleServlet extends HttpServlet {
         writer.print(XHTML_FOOTER);
         res.setStatus(HttpServletResponse.SC_OK);
 
-        System.out.println("Serviced request:  DSpace");
+        log.info("Serviced request:  DSpace");
     }
 
     protected static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
