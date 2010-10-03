@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.dspace.services.RequestService;
 import org.dspace.services.caching.model.EhcacheCache;
 import org.dspace.services.caching.model.MapCache;
 import org.dspace.services.model.Cache;
@@ -33,11 +34,14 @@ import org.junit.Test;
 public class CachingServiceTest extends DSpaceAbstractKernelTest {
 
     private CachingServiceImpl cachingService;
+    private RequestService requestService;
 
     @Before
     public void init() {
         cachingService = getService(CachingServiceImpl.class);
+        requestService = getService(RequestService.class);
         assertNotNull(cachingService);
+        assertNotNull(requestService);
     }
 
     @After
@@ -85,6 +89,8 @@ public class CachingServiceTest extends DSpaceAbstractKernelTest {
      */
     @Test
     public void testInstantiateMapCache() {
+        requestService.startRequest();
+
         MapCache cache = cachingService.instantiateMapCache("aaronz-map", null);
         assertNotNull(cache);
         assertEquals("aaronz-map", cache.getName());
@@ -96,6 +102,8 @@ public class CachingServiceTest extends DSpaceAbstractKernelTest {
         MapCache cache2 = cachingService.instantiateMapCache("aaronz-map", null);
         assertNotNull(cache2);
         assertEquals(cache2, cache);
+
+        requestService.endRequest(null);
     }
 
     /**
@@ -120,11 +128,15 @@ public class CachingServiceTest extends DSpaceAbstractKernelTest {
         assertEquals(CacheScope.INSTANCE, c1.getConfig().getCacheScope());
         assertTrue(c1 instanceof EhcacheCache);
 
+        requestService.startRequest();
+
         Cache rc1 = cachingService.getCache("org.dspace.request.cache1", new CacheConfig(CacheScope.REQUEST));
         assertNotNull(rc1);
         assertEquals("org.dspace.request.cache1", rc1.getName());
         assertEquals(CacheScope.REQUEST, rc1.getConfig().getCacheScope());
         assertTrue(rc1 instanceof MapCache);
+
+        requestService.endRequest(null);
 
         // try getting the same one twice
         Cache c2 = cachingService.getCache("org.dspace.aztest", null);

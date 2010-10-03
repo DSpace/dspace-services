@@ -31,14 +31,4 @@
 
     <bean id="org.dspace.servicemanager.spring.SpringAnnotationBean" 
         class="org.dspace.servicemanager.spring.SpringAnnotationBean" />
-
-
-    <!--
-    Example Activator created in Spring Core Intialization config but not
-    activated until the Activation Stage
-    -->
-    <bean id="org.dspace.activators.FakeActivator"
-            class="org.dspace.activators.FakeActivator" />
-
-
 </beans>
