@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.dspace.servicemanager.DSpaceServiceManager;
 import org.dspace.servicemanager.ServiceManagerSystem;
@@ -86,6 +85,7 @@ public class SpringServiceManager implements ServiceManagerSystem {
 
     public static final String configPath = "spring/spring-dspace-applicationContext.xml";
     public static final String corePath = "classpath*:spring/spring-dspace-core-services.xml";
+    public static final String pluginPath = "classpath*:spring/spring-dspace-plugin-*-services.xml";
 
     @SuppressWarnings("unchecked")
     public <T> T getServiceByName(String name, Class<T> type) {
@@ -167,6 +167,7 @@ public class SpringServiceManager implements ServiceManagerSystem {
         // get all spring config paths
         ArrayList<String> pathList = new ArrayList<String>();
         pathList.add(configPath);
+        pathList.add(pluginPath);
         if (testMode) {
             log.warn("TEST Spring Service Manager running in test mode, no core beans will be started");
         } else {
