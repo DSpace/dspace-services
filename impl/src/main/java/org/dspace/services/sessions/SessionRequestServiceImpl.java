@@ -192,8 +192,7 @@ public final class SessionRequestServiceImpl implements SessionService, RequestS
      * Makes a session from the existing HTTP session stuff in the 
      * current request, or creates a new session of non-HTTP related 
      * sessions.
-     * 
-     * @param sessionId an optional id to assign
+     *
      * @return the new session object which is placed into the request
      * @throws IllegalStateException if not session can be created
      */
