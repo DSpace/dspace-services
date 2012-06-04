@@ -11,7 +11,6 @@ import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.dspace.services.ConfigurationService;
@@ -46,13 +45,15 @@ public class EmailServiceImpl
     @Override
     public Session getSession()
     {
-        if (null == session)
-            init();
+        init();
         return session;
     }
 
     private void init()
     {
+        if (null != session)
+            return;
+
         if (null == cfg)
             cfg = new DSpace().getConfigurationService();
 
@@ -63,8 +64,8 @@ public class EmailServiceImpl
             session = (Session) ctx.lookup("java:comp/env/mail/Session"); // TODO configurable?
         } catch (NamingException ex)
         {
-            logger.error("Couldn't get an email session:  ", ex);
-            return;
+            logger.warn("Couldn't get an email session from environment:  {}",
+                    ex.getMessage());
         }
 
         if (null != session)
@@ -74,7 +75,9 @@ public class EmailServiceImpl
             logger.info("Initializing an email session from configuration.");
             Properties props = new Properties();
             props.put("mail.transport.protocol", "smtp");
-            props.put("mail.host", cfg.getProperty("mail.server"));
+            String host = cfg.getProperty("mail.server");
+            if (null != host)
+                props.put("mail.host", cfg.getProperty("mail.server"));
             String port = cfg.getProperty("mail.server.port");
             if (null != port)
                 props.put("mail.smtp.port", port);
@@ -106,9 +109,6 @@ public class EmailServiceImpl
         if (null == cfg)
             cfg = new DSpace().getConfigurationService();
 
-        System.out.println("cfg = " + cfg);
-        System.out.println("mail.server.username = " + cfg.getProperty("mail.server.username"));
-        System.out.println("mail.server.password = " + cfg.getProperty("mail.server.password"));
         return new PasswordAuthentication(
                 cfg.getProperty("mail.server.username"),
                 cfg.getProperty("mail.server.password"));

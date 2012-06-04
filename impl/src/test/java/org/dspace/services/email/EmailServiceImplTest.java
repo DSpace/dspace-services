@@ -11,10 +11,16 @@
  */
 package org.dspace.services.email;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import org.dspace.services.ConfigurationService;
 import org.dspace.test.DSpaceAbstractKernelTest;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
@@ -25,12 +31,15 @@ import org.junit.Test;
 public class EmailServiceImplTest
         extends DSpaceAbstractKernelTest
 {
+    private static final String USERNAME = "auser";
+    private static final String PASSWORD = "apassword";
     
     public EmailServiceImplTest()
     {
     }
+
     /*
-     @BeforeClass
+    @BeforeClass
     public static void setUpClass()
             throws Exception
     {
@@ -58,29 +67,46 @@ public class EmailServiceImplTest
      */
     @Test
     public void testGetSession()
-    { // TODO set up JNDI provider
+            throws MessagingException
+    {
         System.out.println("getSession");
+        Session session;
         EmailServiceImpl instance = new EmailServiceImpl();
-        Session result = instance.getSession();
-        assertNotNull(" getSession returned null", result);
-        // TODO figure out some more tests we could do
+
+        // Try to get a Session
+        session = instance.getSession();
+        assertNotNull(" getSession returned null", session);
     }
+
+    private static final String CFG_USERNAME = "mail.server.username";
+    private static final String CFG_PASSWORD = "mail.server.password";
 
     /**
      * Test of getPasswordAuthentication method, of class EmailServiceImpl.
      */
     @Test
     public void testGetPasswordAuthentication()
-    { // TODO set up test credentials
+    {
         System.out.println("getPasswordAuthentication");
+        ConfigurationService cfg = getKernel().getConfigurationService();
+
+        // Save existing values.
+        String oldUsername = cfg.getProperty(CFG_USERNAME);
+        String oldPassword = cfg.getProperty(CFG_PASSWORD);
+
+        // Set known values.
+        cfg.setProperty(CFG_USERNAME, USERNAME);
+        cfg.setProperty(CFG_PASSWORD, PASSWORD);
+
         EmailServiceImpl instance = new EmailServiceImpl();
+
         PasswordAuthentication result = instance.getPasswordAuthentication();
         assertNotNull(" null returned", result);
-        assertNotNull(" null username", result.getUserName());
-        assertFalse(" empty username", result.getUserName().isEmpty());
-        assertNotNull(" null password", result.getPassword());
-        assertFalse(" empty password", result.getPassword().isEmpty());
-        System.out.printf(" Returned username '%s'", result.getUserName());
-        System.out.printf(" Returned password '%s'", result.getPassword());
+        assertEquals(" username does not match configuration", result.getUserName(), USERNAME);
+        assertEquals(" password does not match configuration", result.getPassword(), PASSWORD);
+
+        // Restore old values, if any.
+        cfg.setProperty(CFG_USERNAME, oldUsername);
+        cfg.setProperty(CFG_PASSWORD, oldPassword);
     }
 }
