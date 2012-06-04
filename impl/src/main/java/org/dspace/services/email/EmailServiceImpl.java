@@ -14,7 +14,6 @@ import javax.mail.Session;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import org.dspace.kernel.mixins.InitializedService;
 import org.dspace.services.ConfigurationService;
 import org.dspace.services.EmailService;
 import org.dspace.utils.DSpace;
@@ -30,25 +29,37 @@ import org.slf4j.LoggerFactory;
  */
 public class EmailServiceImpl
         extends Authenticator
-        implements InitializedService, EmailService
+        implements EmailService
 {
     private Session session = null;
 
-    private static final ConfigurationService cfg = new DSpace().getConfigurationService();
+    /** Lazy initialized since the service manager won't be running yet. */
+    private static ConfigurationService cfg = null;
 
     private static final Logger logger = (Logger) LoggerFactory.getLogger(EmailServiceImpl.class);
 
-    /* Provide a reference to the JavaMail session. */
+    /**
+     * Provide a reference to the JavaMail session.
+     * 
+     * @return the managed Session, or null if none could be created. 
+     */
     @Override
-    public Session getSession() { return session; }
-
-    @Override
-    public void init()
+    public Session getSession()
     {
-        // First, see if there is a Session in our environment
+        if (null == session)
+            init();
+        return session;
+    }
+
+    private void init()
+    {
+        if (null == cfg)
+            cfg = new DSpace().getConfigurationService();
+
+        // See if there is already a Session in our environment
         try
         {
-            Context ctx = new InitialContext(null);
+            InitialContext ctx = new InitialContext(null);
             session = (Session) ctx.lookup("java:comp/env/mail/Session"); // TODO configurable?
         } catch (NamingException ex)
         {
@@ -92,6 +103,12 @@ public class EmailServiceImpl
     @Override
     protected PasswordAuthentication getPasswordAuthentication()
     {
+        if (null == cfg)
+            cfg = new DSpace().getConfigurationService();
+
+        System.out.println("cfg = " + cfg);
+        System.out.println("mail.server.username = " + cfg.getProperty("mail.server.username"));
+        System.out.println("mail.server.password = " + cfg.getProperty("mail.server.password"));
         return new PasswordAuthentication(
                 cfg.getProperty("mail.server.username"),
                 cfg.getProperty("mail.server.password"));

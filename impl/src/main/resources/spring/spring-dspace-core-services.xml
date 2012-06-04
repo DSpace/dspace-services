@@ -46,6 +46,6 @@
     <bean id="org.dspace.services.EventService" class="org.dspace.services.events.SystemEventService" />
 
     <!-- EMail -->
-    <bean id="org.dspace.services.EMailService" class="org.dspace.services.email.EmailService" />
+    <bean id="org.dspace.services.EMailService" class="org.dspace.services.email.EmailServiceImpl" />
 
 </beans>
