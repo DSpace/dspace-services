@@ -1,9 +1,21 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
 package org.dspace.services;
 
 import java.util.List;
 
 import org.apache.commons.configuration.event.ConfigurationListener;
 
+/**
+ * Dynamic Configuration Service API
+ * 
+ * @author DSpace @ Lyncode
+ */
 public interface DynamicConfigurationService {
 	// Main Configuration File API
 	public Object getProperty (String key);

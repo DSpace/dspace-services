@@ -1,3 +1,10 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
 package org.dspace.servicemanager.config;
 
 import java.io.File;
@@ -15,6 +22,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+/**
+ * Dynamic Configuration Service Implementation
+ * 
+ * @author DSpace @ Lyncode
+ */
 public class DSpaceDynamicConfigurationService implements
 		DynamicConfigurationService {
     private static final Logger log = LoggerFactory.getLogger(DSpaceDynamicConfigurationService.class);
