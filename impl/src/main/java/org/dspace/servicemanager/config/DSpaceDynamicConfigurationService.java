@@ -296,4 +296,20 @@ public class DSpaceDynamicConfigurationService implements
 		}
 		return false;
 	}
+	@Override
+	public String getDescription(String key) {
+		return config.getDescription(key);
+	}
+	@Override
+	public String getModuleDescription(String module, String key) {
+		if (modulesConfig.containsKey(module))
+			return modulesConfig.get(module).getDescription(key);
+		return null;
+	}
+	@Override
+	public String getAddonDescription(String addon, String key) {
+		if (addonsConfig.containsKey(addon))
+			return addonsConfig.get(addon).getDescription(key);
+		return null;
+	}
 }

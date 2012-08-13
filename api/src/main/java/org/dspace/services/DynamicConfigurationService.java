@@ -19,6 +19,7 @@ import org.apache.commons.configuration.event.ConfigurationListener;
 public interface DynamicConfigurationService {
 	// Main Configuration File API
 	public Object getProperty (String key);
+	public String getDescription (String key);
 	public boolean setProperty (String key, Object value);
 	public String getString (String key, String defaultValue);
 	public int getInt (String key, int defaultValue);
@@ -29,6 +30,7 @@ public interface DynamicConfigurationService {
 	
 	// Modules Configuration API
 	public Object getModuleProperty (String module, String key);
+	public String getModuleDescription (String module, String key);
 	public boolean setModuleProperty (String module, String key, Object value);
 	public String getModuleString (String module, String key, String defaultValue);
 	public int getModuleInt (String module, String key, int defaultValue);
@@ -39,6 +41,7 @@ public interface DynamicConfigurationService {
 	
 	// Addon Configuration API
 	public Object getAddonProperty (String addon, String key);
+	public String getAddonDescription (String addon, String key);
 	public boolean setAddonProperty (String addon, String key, Object value);
 	public String getAddonString (String addon, String key, String defaultValue);
 	public long getAddonLong (String addon, String key, long defaultValue);
