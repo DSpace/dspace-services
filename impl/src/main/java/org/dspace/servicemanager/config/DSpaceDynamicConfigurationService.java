@@ -273,6 +273,7 @@ public class DSpaceDynamicConfigurationService implements
 		String path = this.home + File.separator + DSPACE_ADDONS_CONFIG_PATH + File.separator + addon + DOT_CONFIG;
 		try {
 			File f = new File(path);
+			f.mkdirs();
 			f.createNewFile();
 			DSpacePropertiesConfiguration config = new DSpacePropertiesConfiguration(f);
 			this.addonsConfig.put(addon, config);
