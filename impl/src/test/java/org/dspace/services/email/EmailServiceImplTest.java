@@ -5,20 +5,14 @@
  *
  * http://www.dspace.org/license/
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.dspace.services.email;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import org.dspace.services.ConfigurationService;
+import org.dspace.services.EmailService;
 import org.dspace.test.DSpaceAbstractKernelTest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -33,10 +27,6 @@ public class EmailServiceImplTest
 {
     private static final String USERNAME = "auser";
     private static final String PASSWORD = "apassword";
-    
-    public EmailServiceImplTest()
-    {
-    }
 
     /*
     @BeforeClass
@@ -63,7 +53,7 @@ public class EmailServiceImplTest
     */
 
     /**
-     * Test of getSession method, of class EmailServiceImpl.
+     * Test of getSession method, of class EmailService.
      */
     @Test
     public void testGetSession()
@@ -71,7 +61,7 @@ public class EmailServiceImplTest
     {
         System.out.println("getSession");
         Session session;
-        EmailServiceImpl instance = new EmailServiceImpl();
+        EmailService instance = getService(EmailService.class);
 
         // Try to get a Session
         session = instance.getSession();
@@ -98,7 +88,7 @@ public class EmailServiceImplTest
         cfg.setProperty(CFG_USERNAME, USERNAME);
         cfg.setProperty(CFG_PASSWORD, PASSWORD);
 
-        EmailServiceImpl instance = new EmailServiceImpl();
+        EmailServiceImpl instance = (EmailServiceImpl) getService(EmailService.class);
 
         PasswordAuthentication result = instance.getPasswordAuthentication();
         assertNotNull(" null returned", result);
