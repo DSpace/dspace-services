@@ -56,12 +56,15 @@ public class EmailServiceImpl
 
         if (null == cfg)
             cfg = new DSpace().getConfigurationService();
-
+        
         // See if there is already a Session in our environment
+        String sessionName = cfg.getProperty("mail.session.name");
+        if (null == sessionName)
+            sessionName = "Session";
         try
         {
             InitialContext ctx = new InitialContext(null);
-            session = (Session) ctx.lookup("java:comp/env/mail/Session"); // TODO configurable?
+            session = (Session) ctx.lookup("java:comp/env/mail/" + sessionName);
         } catch (NamingException ex)
         {
             logger.warn("Couldn't get an email session from environment:  {}",
