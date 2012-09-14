@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.dspace</groupId>
     <artifactId>dspace-services</artifactId>
-    <packaging>pom</packaging>
     <version>2.0.5-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>DSpace Services Modules</name>
     <url>http://projects.dspace.org/dspace-services</url>
 
@@ -19,7 +19,6 @@
         <version>7</version>
     </parent>
 
-    <!--Force UTF-8 encoding during build on all platforms-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.6</maven.compiler.source>
@@ -49,10 +48,10 @@
                     <includes>
                         <include>src/**</include>
                     </includes>
-                    <!--Use all default exclusions for IDE files & Maven files, see: 
+                    <!--Use all default exclusions for IDE files & Maven files, see:
                         http://code.google.com/p/maven-license-plugin/wiki/Configuration#Default_excludes -->
                     <useDefaultExcludes>true</useDefaultExcludes>
-                    <!-- Add some default DSpace exclusions not covered by <useDefaultExcludes> 
+                    <!-- Add some default DSpace exclusions not covered by <useDefaultExcludes>
                          Individual Maven projects may choose to override these defaults. -->
                     <excludes>
                         <exclude>**/src/test/resources/**</exclude>
@@ -65,15 +64,15 @@
                         <exclude>**/readme*</exclude>
                         <exclude>**/.gitignore</exclude>
                     </excludes>
-                    <mapping> 
-                        <!-- Custom DSpace file extensions which are not recognized by maven-release-plugin: 
+                    <mapping>
+                        <!-- Custom DSpace file extensions which are not recognized by maven-release-plugin:
                              *.xmap, *.xslt, *.wsdd, *.wsdl, *.LICENSE -->
                         <xmap>XML_STYLE</xmap>
                         <xslt>XML_STYLE</xslt>
                         <wsdd>XML_STYLE</wsdd>
                         <wsdl>XML_STYLE</wsdl>
                         <LICENSE>TEXT</LICENSE>
-                    </mapping>  
+                    </mapping>
                     <encoding>UTF-8</encoding>
                     <!-- maven-license-plugin recommends a strict check (e.g. check spaces/tabs too) -->
                     <strictCheck>true</strictCheck>
@@ -152,16 +151,10 @@
         </contributor>
     </contributors>
 
-    <!--
-        The Subversion repository location is used by Continuum to
-        update against when changes have occurred.  This spawns a new
-        build cycle and releases snapshots into the snapshot repository
-        below.
-    -->
     <scm>
-      <connection>scm:git:git@github.com:dspace/DSpace.git</connection>
-      <developerConnection>scm:git:git@github.com:dspace/dspace-services</developerConnection>
-      <url>git@github.com:dspace/DSpace</url>
+      <connection>scm:git:git://github.com/DSpace/dspace-services.git</connection>
+      <developerConnection>scm:git:git@github.com:DSpace/dspace-services.git</developerConnection>
+      <url>https://github.com/DSpace/dspace-services</url>
     </scm>
 
 </project>
