@@ -26,6 +26,16 @@
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
@@ -127,6 +137,17 @@
                 <role>developer</role>
             </roles>
             <timezone>0</timezone>
+        </contributor>
+        <contributor>
+            <name>Mark H. Wood</name>
+            <email>mwoodiupui at users.sourceforge.net</email>
+            <url>http://mypage.iu.edu/~mwood/</url>
+            <organization>Indiana University</organization>
+            <organizationUrl>http://www.iu.edu</organizationUrl>
+            <roles>
+               <role>commiter</role>
+            </roles>
+            <timezone>-5</timezone>
         </contributor>
     </contributors>
 

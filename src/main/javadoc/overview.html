@@ -38,7 +38,10 @@ instance.
 <ul>
  <li>In a standalone application, you can call {@link 
 org.dspace.servicemanager.DSpaceKernelInit#getKernel} to get a reference 
-to one.</li>
+to one.  Make certain that you call {@link 
+org.dspace.servicemanager.DSpaceKernelImpl#start()} on it.  After that, 
+everywhere you need a reference to that kernel, call {@link 
+org.dspace.utils.DSpace#getKernel}.</li>
  <li>In a Spring container, you need to ensure that
 {@code spring/spring-dspace-applicationContext.xml} and
 {@code spring/spring-dspace-core-services.xml} are loaded.  Then you can
@@ -57,6 +60,20 @@ to instantiate the kernel and a
 to establish the connection between the web application and the 
 framework.</li>
 </ul>
+
+<p>
+There can be multiple kernels in a single JVM.  I wish someone would 
+update this paragraph to explain why you would want more than one.  Each 
+kernel has a unique name established by 
+{@code DSpaceKernelInit.getKernel(String)} and looked up by {@code new 
+DSpace(String)}.
+</p>
+<p>If the name is {@code null}, this refers to the "default kernel".  
+The zero-argument {@link org.dspace.utils.DSpace#DSpace()} constructor
+is a convenient way to access the default kernel.  Unless you are doing 
+something fancy, this is probably the only kernel you will ever need to 
+think about.
+</p>
 
 @see <a href='http://wiki.dspace.org/confluence/display/DSDOC/DSpace+Services+Framework'>
 DSpace Services Framework</a>
