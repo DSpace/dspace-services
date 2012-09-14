@@ -300,8 +300,33 @@ public final class DSpaceConfigurationService implements ConfigurationService {
     // loading from files code
 
     /**
-     * Loads up the default initial configuration from the dspace config
-     * files in the file home and on the classpath.
+     * Loads up the default initial configuration from the DSpace configuration
+     * files in the file home and on the classpath.  Order:
+     * <ol>
+     *  <li>Create {@code serverId} from local host name if available.</li>
+     *  <li>Create {@code dspace.testing = false}.
+     *  <li>Determine the value of {@code dspace.dir} and add to configuration.</li>
+     *  <li>Load {@code classpath:config/dspace_defaults.cfg}.</li>
+     *  <li>Copy system properties with names beginning "dspace." <em>except</em>
+     *      {@code dspace.dir}, removing the "dspace." prefix from the name.</li>
+     *  <li>Load all {@code classpath:dspace/config-*.cfg} using whatever matched "*" as module prefix.</li>
+     *  <li>Load all {@code ${dspace.dir}/config/modules/*.cfg} using whatever matched "*" as module prefix.</li>
+     *  <li>Load {@code classpath:dspace.cfg}.</li>
+     *  <li>Load from the path in the system property {@code dspace.configuration}
+     *      if defined, or {@code ${dspace.dir}/config/dspace.cfg}.</li>
+     *  <li>Perform variable substitutions throughout the assembled configuration.</li>
+     * </ol>
+     * 
+     * <p>The initial value of {@code dspace.dir} will be:</p>
+     * <ol>
+     *  <li>the value of the system property {@code dspace.dir} if defined;</li>
+     *  <li>else the value of {@code providedHome} if not null;</li>
+     *  <li>else the servlet container's home + "/dspace/" if defined (see {@link getCatalina()});</li>
+     *  <li>else the user's home directory if defined;</li>
+     *  <li>else "/".
+     * </ol>
+     * 
+     * @param providedHome DSpace home directory, or null.
      */
     public void loadInitialConfig(String providedHome) {
         Map<String, String> configMap = new LinkedHashMap<String, String>();
@@ -318,10 +343,10 @@ public final class DSpaceConfigurationService implements ConfigurationService {
         // now we load the settings from properties files
         String homePath = System.getProperty(DSPACE_HOME);
 
-		// now we load from the provided parameter if its not null
+	// now we load from the provided parameter if its not null
         if (providedHome != null && homePath == null) {
 			homePath = providedHome;
-		}
+        }
 
         if (homePath == null) {
             String catalina = getCatalina();
@@ -410,8 +435,11 @@ public final class DSpaceConfigurationService implements ConfigurationService {
         pushPropsToMap(configMap, readPropertyResource(DSPACE + DOT_CONFIG));
 
         // read all the known files from the home path that are properties files
-        pushPropsToMap(configMap, readPropertyFile(homePath + File.separatorChar + DSPACE_CONFIG_PATH));
-//        pushPropsToMap(configMap, readPropertyFile(homePath + File.separatorChar + DSPACE_CONFIG_PATH));
+        String configPath = System.getProperty("dspace.configuration");
+        if (null == configPath)
+            configPath = homePath + File.separatorChar + DSPACE_CONFIG_PATH;
+        pushPropsToMap(configMap, readPropertyFile(configPath));
+
 //      TODO: still use this local file loading?
 //        pushPropsToMap(configMap, readPropertyFile(homePath + File.separatorChar + "local" + DOT_PROPERTIES));
 
